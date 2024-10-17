@@ -30,8 +30,8 @@ Andrea Ciaramitaro, who won the **first prize** in this competition last year (2
 ## Setup and Usage
 
 1. **Hardware**:
-   - Connect the servo motors for X and Y movement of the eyes to **pins 9 and 10**.
-   - Connect the servo motors for eyelid control to **pins 11-17** (up to 7 eyelids can be controlled).
+   - Connect the servo motors for X and Y movement of the eyes to **pins 2 and 16**.
+   - Connect the servo motors for eyelid control to **pins 17-24** (up to 7 eyelids can be controlled).
    - Connect the Wii Nunchuk to the Arduino using the I2C interface (pins A4 and A5 on most Arduinos).
 
 2. **Software**:
