@@ -1,4 +1,4 @@
-# Eye Movement Servo Control for Viareggio Carnival 2025
+# Cosa Stiamo Diventando, arduino code repository for eye movement control 
 
 ![Cosa Stiamo Diventando](./img/cosaStiamoDiventando.jpg)
 
