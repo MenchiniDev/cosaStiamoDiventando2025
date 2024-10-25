@@ -1,10 +1,10 @@
-# Cosa Stiamo Diventando, arduino code repository for eye movement control 
+# Cosa Stiamo Diventando, Viareggio's 2025 Carnival
 
 ![Cosa Stiamo Diventando](./img/cosaStiamoDiventando.jpg)
 
 
 
-## Project Description
+## Arduino code repository for eye movement control 
 
 This project contains the Arduino code used to control servo motors for the eye movement of a figure designed by **Andrea Ciaramitaro** for the **2025 Viareggio Carnival**, specifically for the "Mascherate Singole" category. The servos will control both the direction of the eyes (X and Y axes) and the opening/closing of the eyelids. The movements are manipulated via a Wii Nunchuk controller, providing manual control as well as random eye movements and eyelid blinking.
 
