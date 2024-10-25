@@ -2,6 +2,10 @@
 #include <ArduinoNunchuk.h>
 #include <Servo.h>
 
+//
+// TODO: modifica chiusura occhi, non dev'essere randomica ma alla pressione si devono chiudere tutti contemporaneamente
+//
+
 // da modificare poi i servo X e Y e metterne 14 :)
 Servo servo0X;  // Servo per movimento sull'asse X
 Servo servo1X;  // Servo per movimento sull'asse X
