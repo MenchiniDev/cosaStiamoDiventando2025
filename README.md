@@ -1,5 +1,9 @@
 # Eye Movement Servo Control for Viareggio Carnival 2025
 
+![Cosa Stiamo Diventando](./img/cosaStiamoDiventando.jpg)
+
+
+
 ## Project Description
 
 This project contains the Arduino code used to control servo motors for the eye movement of a figure designed by **Andrea Ciaramitaro** for the **2025 Viareggio Carnival**, specifically for the "Mascherate Singole" category. The servos will control both the direction of the eyes (X and Y axes) and the opening/closing of the eyelids. The movements are manipulated via a Wii Nunchuk controller, providing manual control as well as random eye movements and eyelid blinking.
