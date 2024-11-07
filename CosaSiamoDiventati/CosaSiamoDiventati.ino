@@ -77,7 +77,7 @@ void closeEye(int randomE, int randomT) {
 }
 
 void setup() {
-  Serial.begin(9600);  // Inizializza la comunicazione seriale
+  Serial.begin(19200);  // Inizializza la comunicazione seriale
   nunchuk.init();      // Inizializza il Nunchuk
   
   randomMov = 0;  // Inizialmente, i movimenti random sono disabilitati
