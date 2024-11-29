@@ -13,7 +13,7 @@ const int servoZChannel = 2;     // Canale del PCA9685 per il servo controllato 
 const int servoXMirrorChannel = 3;  // Canale del PCA9685 per il servo speculare dell'asse X
 const int servoYMirrorChannel = 4;  // Canale del PCA9685 per il servo speculare dell'asse Y
 const int minPulse = 150;        // Valore PWM minimo per il servo (angolo 0)
-const int maxPulse = 600;        // Valore PWM massimo per il servo (angolo 180)
+const int maxPulse = 300;        // Valore PWM massimo per il servo (angolo 60)
 
 bool zButtonPressed = false;     // Flag per debounce del pulsante Z
 
