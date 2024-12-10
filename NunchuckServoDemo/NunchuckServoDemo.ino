@@ -2,7 +2,14 @@
 #include <ArduinoNunchuk.h>
 #include <Adafruit_PWMServoDriver.h>  // Libreria per PCA9685
 
-#define BAUDRATE 19200
+#define BAUDRATE 9600
+
+/*
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+CODICE IN SVILUPPO CON AGGIUNTA COSTANTE DI SERVO MOTORI
+TODO: MIGLIORARE CHIUSURA PALPEBRA
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+*/
 
 ArduinoNunchuk nunchuk = ArduinoNunchuk();
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();  // Oggetto PCA9685
@@ -12,7 +19,7 @@ const int servoYChannel = 1;     // Canale del PCA9685 per il servo asse Y origi
 const int servoZChannel = 2;     // Canale del PCA9685 per il servo controllato dal pulsante Z
 const int servoXMirrorChannel = 3;  // Canale del PCA9685 per il servo speculare dell'asse X
 const int servoYMirrorChannel = 4;  // Canale del PCA9685 per il servo speculare dell'asse Y
-const int minPulse = 150;        // Valore PWM minimo per il servo (angolo 0)
+const int minPulse = 0;        // Valore PWM minimo per il servo (angolo 0)
 const int maxPulse = 300;        // Valore PWM massimo per il servo (angolo 60)
 
 bool zButtonPressed = false;     // Flag per debounce del pulsante Z
@@ -80,29 +87,26 @@ void loop()
   Serial.print(servoYMirrorChannel);
   Serial.print(": ");
   Serial.println(servoYPulse);
+  
 
   // Controllo del pulsante Z con debounce
-  if (nunchuk.zButton && !zButtonPressed) {
+  if (nunchuk.zButton) {
     zButtonPressed = true;  // Setta il flag per evitare doppi trigger
     Serial.println("Pulsante Z rilevato come premuto.");
 
     // Muovi il servo Z a 180 gradi
-    pwm.setPWM(servoZChannel, 0, maxPulse);  
-    delay(500); // Attesa che il servo raggiunga i 180 gradi
+    pwm.setPWM(servoZChannel, 0, 600);  
 
     // Riporta il servo Z a 0 gradi
-    pwm.setPWM(servoZChannel, 0, minPulse);
+    pwm.setPWM(servoZChannel, 0, 300);
     Serial.println("Servo su canale 2 riportato a 0 gradi");
-
-    // Disattiva temporaneamente il segnale PWM per stabilità
-    delay(100);
-    pwm.setPWM(servoZChannel, 0, 0);  // Stop temporaneo sul canale
+    delay(500);
 
   } else if (!nunchuk.zButton && zButtonPressed) {
     // Resetta il flag se il pulsante Z viene rilasciato
     zButtonPressed = false;
   }
-
+  
   // Debug di altri dati del Nunchuk
   Serial.print("Accelerazione X: ");
   Serial.println(nunchuk.accelX);
@@ -113,5 +117,4 @@ void loop()
   Serial.print("Stato Bottone C: ");
   Serial.println(nunchuk.cButton);
 
-  delay(200);  // Piccolo ritardo per stabilità del loop
 }
