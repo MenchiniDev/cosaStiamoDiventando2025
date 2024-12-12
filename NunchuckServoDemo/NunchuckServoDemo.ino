@@ -17,10 +17,12 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();  // Oggetto PCA9685
 const int servoXChannel = 0;     // Canale del PCA9685 per il servo asse X originale
 const int servoYChannel = 1;     // Canale del PCA9685 per il servo asse Y originale
 const int servoZChannel = 2;     // Canale del PCA9685 per il servo controllato dal pulsante Z
+
 const int servoXMirrorChannel = 3;  // Canale del PCA9685 per il servo speculare dell'asse X
 const int servoYMirrorChannel = 4;  // Canale del PCA9685 per il servo speculare dell'asse Y
+
 const int minPulse = 0;        // Valore PWM minimo per il servo (angolo 0)
-const int maxPulse = 300;        // Valore PWM massimo per il servo (angolo 60)
+const int maxPulse = 500;        // Valore PWM massimo per il servo (angolo 60)
 
 bool zButtonPressed = false;     // Flag per debounce del pulsante Z
 
@@ -46,7 +48,7 @@ void loop()
 {
   // Aggiorna i dati dal Nunchuk e controlla se è stato letto correttamente
   nunchuk.update();
-  Serial.println("Dati Nunchuk aggiornati");
+  //Serial.println("Dati Nunchuk aggiornati");
 
   // Lettura dell'asse X del joystick
   int joyX = nunchuk.analogX;
@@ -54,39 +56,8 @@ void loop()
   Serial.println(joyX);
 
   // Mappatura del valore di joyX in un segnale PWM per il servo asse X
-  int servoXPulse = map(joyX, 0, 255, minPulse, maxPulse);
-  Serial.print("Valore mappato PWM per il servo asse X: ");
-  Serial.println(servoXPulse);
-
-  // Invio del segnale PWM al servo sull'asse X (canale 0) e sul canale speculare (3)
+  int servoXPulse = map(joyX, 255, 0, minPulse, maxPulse);
   pwm.setPWM(servoXChannel, 0, servoXPulse);
-  pwm.setPWM(servoXMirrorChannel, 0, servoXPulse);
-  Serial.print("PWM inviato ai servo asse X sui canali ");
-  Serial.print(servoXChannel);
-  Serial.print(" e ");
-  Serial.print(servoXMirrorChannel);
-  Serial.print(": ");
-  Serial.println(servoXPulse);
-
-  // Lettura dell'asse Y del joystick
-  int joyY = nunchuk.analogY;
-  Serial.print("Valore Asse Y dal joystick: ");
-  Serial.println(joyY);
-
-  // Mappatura del valore di joyY in un segnale PWM per il servo asse Y
-  int servoYPulse = map(joyY, 0, 255, minPulse, maxPulse);
-  Serial.print("Valore mappato PWM per il servo asse Y: ");
-  Serial.println(servoYPulse);
-
-  // Invio del segnale PWM al servo sull'asse Y (canale 1) e sul canale speculare (4)
-  pwm.setPWM(servoYChannel, 0, servoYPulse);
-  pwm.setPWM(servoYMirrorChannel, 0, servoYPulse);
-  Serial.print("PWM inviato ai servo asse Y sui canali ");
-  Serial.print(servoYChannel);
-  Serial.print(" e ");
-  Serial.print(servoYMirrorChannel);
-  Serial.print(": ");
-  Serial.println(servoYPulse);
   
 
   // Controllo del pulsante Z con debounce
@@ -95,10 +66,10 @@ void loop()
     Serial.println("Pulsante Z rilevato come premuto.");
 
     // Muovi il servo Z a 180 gradi
-    pwm.setPWM(servoZChannel, 0, 600);  
+    pwm.setPWM(servoZChannel, 0, 300);  
 
     // Riporta il servo Z a 0 gradi
-    pwm.setPWM(servoZChannel, 0, 300);
+    pwm.setPWM(servoZChannel, 0, 0);
     Serial.println("Servo su canale 2 riportato a 0 gradi");
     delay(500);
 
@@ -108,13 +79,9 @@ void loop()
   }
   
   // Debug di altri dati del Nunchuk
-  Serial.print("Accelerazione X: ");
-  Serial.println(nunchuk.accelX);
-  Serial.print("Accelerazione Y: ");
-  Serial.println(nunchuk.accelY);
-  Serial.print("Accelerazione Z: ");
-  Serial.println(nunchuk.accelZ);
-  Serial.print("Stato Bottone C: ");
-  Serial.println(nunchuk.cButton);
+  //Serial.print("Stato Bottone C: ");
+  //Serial.println(nunchuk.cButton);
+
+  delay(100);
 
 }

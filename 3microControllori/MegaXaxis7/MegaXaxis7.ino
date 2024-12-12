@@ -2,7 +2,7 @@
 #include <ArduinoNunchuk.h>
 #include <Adafruit_PWMServoDriver.h>  // Libreria per PCA9685
 
-#define BAUDRATE 19200
+#define BAUDRATE 9600
 
 ArduinoNunchuk nunchuk = ArduinoNunchuk();
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40);  // Indirizzo PCA9685 (modifica se necessario)
@@ -23,11 +23,13 @@ void setup() {
 void loop() {
   nunchuk.update();
   int joyX = nunchuk.analogX;  // Leggi posizione joystick X
+  Serial.println(nunchuk.analogX);
+  Serial.println(joyX);
   int servoPulse = map(joyX, 0, 255, minPulse, maxPulse);
 
   for (int i = 0; i < 7; i++) {
     pwm.setPWM(servoChannels[i], 0, servoPulse);  // Muovi tutti i servo asse X
   }
 
-  delay(20);  // Riduce il carico
+  delay(200);  // Riduce il carico
 }

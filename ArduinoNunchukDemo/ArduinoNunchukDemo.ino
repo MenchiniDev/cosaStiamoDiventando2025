@@ -2,14 +2,14 @@
 #include <Wire.h>
 #include <ArduinoNunchuk.h>
 
-#define BAUDRATE 19200
+#define BAUDRATE 9600
 
 ArduinoNunchuk nunchuk = ArduinoNunchuk();
 
 void setup()
 {
   Serial.begin(BAUDRATE);
-  Wire.setClock(400000);  // Imposta la velocità a 400 kHz (opzionale)
+  Wire.setClock(100000);  // Imposta la velocità a 400 kHz (opzionale)
   nunchuk.init();
 }
 
