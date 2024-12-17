@@ -9,15 +9,17 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40);  // Indirizzo PCA96
 
 const int servoChannels[7] = {0, 1, 2, 3, 4, 5, 6};  // Canali PCA per i servo X
 const int minPulse = 150;  // Valore PWM minimo (corrisponde a 0°)
-const int maxPulse = 450;  // Valore PWM massimo (corrisponde a 180°)
+const int maxPulse = 400;  // Valore PWM massimo (corrisponde a 180°)
 
 bool cycleActive = false;  // Stato del ciclo
 bool cButtonState = false;  // Stato attuale del pulsante C
 bool lastCButtonState = false;  // Stato precedente del pulsante C
 
+int lastJoyX = -1;  // Memorizza il valore precedente di JoyX
+
 void setup() {
   Serial.begin(BAUDRATE);
-  Wire.setClock(400000);  // Imposta velocità I²C a 400 kHz
+  Wire.setClock(100000);  // Imposta velocità I²C a 400 kHz
   pwm.begin();
   pwm.setPWMFreq(50);     // Frequenza per i servo
   nunchuk.init();
@@ -39,16 +41,18 @@ void loop() {
   if (cycleActive) {
     executeSinusoidalCycle();  // Funzione non bloccante per il ciclo
   } else {
-    // Controllo normale del joystick
+    // Controllo normale del joystick con controllo della differenza
     int joyX = nunchuk.analogX;  // Leggi posizione joystick X
+    Serial.print("JoyX: ");
     Serial.println(joyX);
     int servoPulse = map(joyX, 0, 255, minPulse, maxPulse);
     for (int i = 0; i < 7; i++) {
       pwm.setPWM(servoChannels[i], 0, servoPulse);  // Muovi tutti i servo asse X
-    }
+      }
+    lastJoyX = joyX;  // Aggiorna il valore precedente
   }
 
-  delay(20);  // Riduce il carico
+  delay(200);  // Riduce il carico
 }
 
 void executeSinusoidalCycle() {
@@ -59,7 +63,7 @@ void executeSinusoidalCycle() {
 
   int pulseStep = 20;      // Incremento per ogni passo
   int waveLength = 5;      // Numero di oscillazioni "crescenti"
-  int delayTime = 20;      // Ritardo tra ogni passo
+  int delayTime = 70;      // Ritardo tra ogni passo
 
   // Controlla se è il momento di aggiornare il ciclo
   if (millis() - lastTime >= delayTime) {
