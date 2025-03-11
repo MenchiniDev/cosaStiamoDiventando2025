@@ -3,71 +3,122 @@
 ![Cosa Stiamo Diventando](./img/cosaStiamoDiventando.jpg)
 
 
+# CosaStiamoDiventando
 
-## Arduino code repository for eye movement control 
+## Descrizione del Progetto
+CosaStiamoDiventando è un sistema avanzato di controllo per la maschera singola "Singola Singola" di Andrea Giulio Ciaramitaro, classificatasi al secondo posto al Carnevale di Viareggio 2025. Il progetto prevede l'utilizzo di tre microcontrollori che operano in sinergia per gestire i servomotori responsabili dei movimenti della maschera. Dopo numerose fasi di test e debug, è stato ottimizzato per garantire movimenti fluidi e reattivi.
 
-This project contains the Arduino code used to control servo motors for the eye movement of a figure designed by **Andrea Ciaramitaro** for the **2025 Viareggio Carnival**, specifically for the "Mascherate Singole" category. The servos will control both the direction of the eyes (X and Y axes) and the opening/closing of the eyelids. The movements are manipulated via a Wii Nunchuk controller, providing manual control as well as random eye movements and eyelid blinking.
+## Struttura del Sistema
+Il sistema si basa su tre microcontrollori, ognuno con un compito specifico:
 
-Andrea Ciaramitaro, who won the **first prize** in this competition last year (2024), continues to bring innovative mechanical designs to the carnival. This project is a critical part of his new creation, helping bring the eyes of the figure to life, adding expressiveness and interaction to the artwork.
+1. **ESP1 - Lettura del Nunchuk e trasmissione seriale**
+   - Stabilisce la comunicazione I2C con il Nunchuk.
+   - Legge i valori dell'asse X e dei pulsanti C e Z.
+   - Converte i dati in formato seriale e li invia agli altri microcontrollori.
 
-## Components
+   **Snippet di codice ESP1:**
+   ```cpp
+   #include <Wire.h>
+   #include <ArduinoNunchuk.h>
 
-- **Arduino**: Central controller for the servos.
-- **Servo Motors**: Control eye direction (X and Y axes) and eyelid movements.
-- **Wii Nunchuk**: Used for manual control of the eye direction and eyelid movement.
-- **Power Supply**: Ensure adequate power for the servos and Arduino.
+   ArduinoNunchuk nunchuk;
 
-## Features
+   void setup() {
+       Serial.begin(115200);
+       Wire.begin();
+       nunchuk.init();
+   }
 
-1. **Manual Eye Movement Control**:
-   - The joystick on the Wii Nunchuk moves the eyes along the X and Y axes using two servos.
-   
-2. **Random Eye Movements**:
-   - When enabled, the eyes move randomly, simulating a more dynamic and natural behavior.
-   
-3. **Eyelid Control**:
-   - The Z button on the Nunchuk closes a random eyelid for a random amount of time, simulating blinks.
+   void loop() {
+       nunchuk.update();
+       Serial.print(nunchuk.analogX);
+       Serial.print(",");
+       Serial.print(nunchuk.buttonC);
+       Serial.print(",");
+       Serial.println(nunchuk.buttonZ);
+       delay(50);
+   }
+   ```
 
-4. **Toggle Random Movements**:
-   - The C button toggles the random movement mode on and off, allowing for a mix of manual and automated control.
+2. **Mega - Decodifica dei dati e controllo dell'asse X**
+   - Riceve i dati seriali da ESP1.
+   - Interpreta i valori e determina il movimento dei servomotori.
+   - Implementa un ciclo sinusoidale per garantire movimenti fluidi.
 
-## Setup and Usage
+   **Snippet di codice Mega:**
+   ```cpp
+   #include <Servo.h>
 
-1. **Hardware**:
-   - Connect the servo motors for X and Y movement of the eyes to **pins 2 and 16**.
-   - Connect the servo motors for eyelid control to **pins 17-24** (up to 7 eyelids can be controlled).
-   - Connect the Wii Nunchuk to the Arduino using the I2C interface (pins A4 and A5 on most Arduinos).
+   Servo servo;
+   int pos;
 
-2. **Software**:
-   - Load the provided code onto an Arduino board.
-   - Initialize the Nunchuk and servos in the `setup()` function.
-   - Use the Nunchuk joystick to manually control eye movements or toggle random movements with the C button.
+   void setup() {
+       Serial.begin(115200);
+       servo.attach(9);
+   }
 
-## How It Works
+   void loop() {
+       if (Serial.available()) {
+           String data = Serial.readStringUntil('\n');
+           pos = data.toInt();
+           servo.write(map(pos, 0, 255, 0, 180));
+       }
+   }
+   ```
 
-- **Joystick Control**: The X and Y positions from the Nunchuk's joystick are mapped to the angles for the servo motors controlling eye direction.
-  
-- **Random Movements**: When enabled via the C button, the eyes will move randomly across both axes. Additionally, random eyelid movements simulate natural blinking.
+3. **ESP2 - Controllo finale dei servomotori**
+   - Riceve i comandi da Mega e applica le correzioni necessarie.
+   - Controlla i servomotori e implementa un sistema di sicurezza per evitare malfunzionamenti.
 
-- **Eyelid Blinking**: Pressing the Z button at any time will trigger a random eyelid to close for a random duration, adding a more realistic touch to the figure's expressions.
+   **Snippet di codice ESP2:**
+   ```cpp
+   #include <Servo.h>
 
-## Code Snippet
+   Servo servo;
+   int pos;
 
-```cpp
-// Close a random eyelid for a random duration
-void closeEye(int randomE, int randomT) {
-  switch (randomE) {
-    case 0:
-      servoP0.write(180);
-      delay(randomT);
-      servoP0.write(0);
-      break;
-    // Add similar cases for other eyelids...
-  }
-}
+   void setup() {
+       Serial.begin(115200);
+       servo.attach(5);
+   }
 
-// Main loop controlling servo movements and eyelid control
-void loop() {
-  nunchuk.update();
-  // Read joystick, move eyes, and trigger eyelid blinks based on user input...
-}
+   void loop() {
+       if (Serial.available()) {
+           String data = Serial.readStringUntil('\n');
+           pos = data.toInt();
+           if (pos >= 0 && pos <= 180) {
+               servo.write(pos);
+           }
+       }
+   }
+   ```
+
+## Funzionamento
+1. **Lettura del Nunchuk**: ESP1 comunica con il Nunchuk, interpreta i comandi e li invia via seriale.
+2. **Elaborazione dei dati**: Mega legge i dati e decide i movimenti da eseguire.
+3. **Movimento dei servomotori**: ESP2 riceve i comandi e li applica ai servomotori.
+4. **Sicurezza e Controllo**: Sono implementati controlli di errore e watchdog per garantire stabilità.
+
+## Debug e Ottimizzazioni
+- Test approfonditi sulla comunicazione seriale tra microcontrollori.
+- Implementazione di filtri per ridurre i disturbi nei movimenti.
+- Ottimizzazione delle sequenze di movimento per un controllo preciso e realistico.
+
+## Dipendenze
+- **ArduinoNunchuk** per la gestione del Nunchuk.
+- **Wire** per la comunicazione I2C.
+- **Servo** per il controllo dei servomotori.
+- **Watchdog Timer** per la gestione della stabilità.
+
+## Installazione e Utilizzo
+1. Caricare il codice su ciascun microcontrollore.
+2. Collegare il Nunchuk all'ESP1 e i servomotori agli altri microcontrollori.
+3. Avviare il sistema e monitorare la comunicazione seriale.
+
+## Contatti
+Per supporto o domande, contattare il responsabile del progetto.
+
+---
+
+CosaStiamoDiventando continua a evolversi, con futuri miglioramenti per ottimizzare la stabilità e le prestazioni del sistema.
+
