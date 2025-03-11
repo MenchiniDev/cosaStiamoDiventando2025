@@ -6,7 +6,7 @@
 # CosaStiamoDiventando
 
 ## Descrizione del Progetto
-CosaStiamoDiventando è un sistema avanzato di controllo per la maschera singola "Singola Singola" di Andrea Giulio Ciaramitaro, classificatasi al secondo posto al Carnevale di Viareggio 2025. Il progetto prevede l'utilizzo di tre microcontrollori che operano in sinergia per gestire i servomotori responsabili dei movimenti della maschera. Dopo numerose fasi di test e debug, è stato ottimizzato per garantire movimenti fluidi e reattivi.
+CosaStiamoDiventando è un sistema avanzato di controllo per la maschera singola "Cosa Stiamo Diventando" di Andrea Giulio Ciaramitaro, classificatasi al secondo posto al Carnevale di Viareggio 2025. Il progetto prevede l'utilizzo di tre microcontrollori che operano in sinergia per gestire i servomotori responsabili dei movimenti della maschera. Dopo numerose fasi di test e debug, è stato ottimizzato per garantire movimenti fluidi e reattivi.
 
 ## Struttura del Sistema
 Il sistema si basa su tre microcontrollori, ognuno con un compito specifico:
