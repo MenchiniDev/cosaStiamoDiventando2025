@@ -6,7 +6,7 @@
 # CosaStiamoDiventando
 
 ## Descrizione del Progetto
-CosaStiamoDiventando è un sistema avanzato di controllo per la maschera singola "Cosa Stiamo Diventando" di Andrea Giulio Ciaramitaro, classificatasi al secondo posto al Carnevale di Viareggio 2025. Il progetto prevede l'utilizzo di tre microcontrollori che operano in sinergia per gestire i servomotori responsabili dei movimenti della maschera. Dopo numerose fasi di test e debug, è stato ottimizzato per garantire movimenti fluidi e reattivi.
+Il progetto consiste in un sistema avanzato di controllo per la maschera singola "Cosa Stiamo Diventando" di Andrea Giulio Ciaramitaro, classificatasi al secondo posto al Carnevale di Viareggio 2025. Il progetto prevede l'utilizzo di tre microcontrollori che operano in sinergia per gestire i servomotori responsabili dei movimenti della maschera. Il sistema è stato ottimizzato per garantire movimenti fluidi e resilienti a guasti.
 
 ## Struttura del Sistema
 # Requisiti:
@@ -127,9 +127,7 @@ Per garantire un funzionamento stabile ed efficiente del sistema, sono state imp
    - Se la connessione non viene ristabilita entro 3 tentativi o 10 secondi, il microcontrollore si riavvia automaticamente e tenta di riconnettersi all'avvio.  
 
 3. **Ottimizzazione del consumo energetico e della durata dei servo motori**  
-   - Implementazione di strategie per ridurre il consumo energetico e preservare i servo motori.  
-   - Se il valore dell'asse X del Nunchuck è nell'intorno del valore di equilibrio, i segnali per i servo motori responsabili del movimento degli occhi vengono disattivati.  
-
+   - per ottenere un maggiore risparmio energetico e una maggiore conservazione dei servo motori, sono stati implementati diversi sistemi di preservazione, come la rimozione di segnali da inviare ai servo motori responsabili degli occhi, se il valore dell'asse X proveniente dal *Nunchuck* è nell'intorno del valore di equilibrio.
 4. **Sicurezza del sistema**  
    - Per garantire un controllo manuale in caso di emergenza, è stato aggiunto un interruttore collegato all'alimentazione dei moduli PCA9685 e dei microcontrollori.  
    - Questo permette di disattivare rapidamente il sistema in caso di criticità.  
@@ -146,9 +144,5 @@ Per garantire un funzionamento stabile ed efficiente del sistema, sono state imp
 3. Avviare il sistema e monitorare la comunicazione seriale.
 
 ## Contatti
-Per supporto o domande, contattare il responsabile del progetto.
-
----
-
-CosaStiamoDiventando continua a evolversi, con futuri miglioramenti per ottimizzare la stabilità e le prestazioni del sistema.
+Per domande o chiarimenti, non esitare a contattarmi!
 
