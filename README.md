@@ -110,14 +110,29 @@ Il sistema si basa su tre microcontrollori, ognuno con un compito specifico:
 4. **Sicurezza e Controllo**: Sono implementati controlli di errore e watchdog per garantire stabilità.
 
 ## Debug e Ottimizzazioni
-- Implementazione di filtri per ridurre i disturbi nei movimenti.
-- Taratura per ogni servo motore del proprio gioco, modificando i valori in range del relativo movimento.
-- Creazione di diversi sistemi di gestione delle criticità, tra cui:
-- 1 -> in caso di malfunzionamento del Nunchuck, l' *ESP1* si occupa di inviare ai due controllori un segnale di errore,
--    impostando di conseguenza i movimenti sul ciclo, essendo impossibile raccogliere informazioni sull'asse X e palpebre da inviare ai servo motori.
-- 2 -> in caso di malfunzionamento delle periferiche *PCA 8695*, come ad esempio una loro disconnessione, il *MEGA* e l'*ESP2* sono provvisti di una funzione che consente di ristabilire la connessione con la periferica. Se la connessione non viene stabilita entro 3 volte, o comunque entro 10 secondi, il micro controllore si riavvia, ricercando all'avvio la connessione con la periferica.
-- 3 -> per ottenere un maggiore risparmio energetico e una maggiore conservazione dei servo motori, sono stati implementati diversi sistemi di preservazione, come la rimozione di segnali da inviare ai servo motori responsabili degli occhi, se il valore dell'asse X proveniente dal *Nunchuck* è nell'intorno del valore di equilibrio.
-- 4 -> per garantire la sicurezza del circuito e un controllo umano al di sopra, è stato impostato un interruttore collegato all'alimentazione dei *PCA 8695* e dei controllori, garantendo un maggiore controllo del sistema di fronte a criticità.
+
+Per garantire un funzionamento stabile ed efficiente del sistema, sono state implementate diverse ottimizzazioni e misure di gestione delle criticità.
+
+### Filtri e Tarature  
+- Applicazione di filtri per ridurre i disturbi nei movimenti.  
+- Taratura individuale di ogni servo motore, regolando il range di movimento per compensare eventuali giochi meccanici.  
+
+### Gestione delle Criticità  
+1. **Errore del Nunchuck**  
+   - In caso di malfunzionamento del Nunchuck, l'`ESP1` invia un segnale di errore ai controllori (`MEGA` ed `ESP2`).  
+   - Di conseguenza, i movimenti vengono impostati su un ciclo predefinito, poiché non è possibile raccogliere dati dall'asse X e dalle palpebre per il controllo dei servo motori.  
+
+2. **Disconnessione delle periferiche PCA9685**  
+   - Il `MEGA` e l'`ESP2` dispongono di una funzione di ripristino della connessione con i moduli PCA9685.  
+   - Se la connessione non viene ristabilita entro 3 tentativi o 10 secondi, il microcontrollore si riavvia automaticamente e tenta di riconnettersi all'avvio.  
+
+3. **Ottimizzazione del consumo energetico e della durata dei servo motori**  
+   - Implementazione di strategie per ridurre il consumo energetico e preservare i servo motori.  
+   - Se il valore dell'asse X del Nunchuck è nell'intorno del valore di equilibrio, i segnali per i servo motori responsabili del movimento degli occhi vengono disattivati.  
+
+4. **Sicurezza del sistema**  
+   - Per garantire un controllo manuale in caso di emergenza, è stato aggiunto un interruttore collegato all'alimentazione dei moduli PCA9685 e dei microcontrollori.  
+   - Questo permette di disattivare rapidamente il sistema in caso di criticità.  
 
 ## Dipendenze
 - **ArduinoNunchuk** per la gestione del Nunchuk.
