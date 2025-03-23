@@ -146,3 +146,5 @@ Per garantire un funzionamento stabile ed efficiente del sistema, sono state imp
 ## Contatti
 Per domande o chiarimenti, non esitare a contattarmi!
 
+![Risultato finale 😄](./img/final.jpg)
+
